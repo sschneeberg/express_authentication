@@ -24,14 +24,27 @@ const sessionObj = {
     resave: false,
     saveUninitialized: true
 }
-app.use(session(sessionObj))
+app.use(session(sessionObj));
+//initialize passport and run middleware
+app.use(passport.initialize());
+app.use(passport.session());
+//flash to send temp. messages to user
+app.use(flash());
+//set up middleware to have messages acessible in every view
+app.use((req, res, next) => {
+    //before every route, attach user to res.local
+    res.locals.alerts = req.flash();
+    res.locals.currentUser = req.user;
+    next();
+})
 
 
 app.get('/', (req, res) => {
-    res.render('index');
+    console.log(res.locals.alerts)
+    res.render('index', { alerts: res.locals.alerts });
 });
 
-app.get('/profile', (req, res) => {
+app.get('/profile', isLoggedIn, (req, res) => {
     res.render('profile');
 });
 

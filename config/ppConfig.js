@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategry = require('passport-local').Strategy;
-const db = require('./models');
+const db = require('../models');
 
 //'serialize' info making it easier to log in
 passport.serializeUser((user, callback) => {
@@ -12,7 +12,9 @@ passport.serializeUser((user, callback) => {
 passport.deserializeUser((userId, callback) => {
     db.user.findByPK(userId).then(user => {
         if (user) {
-            callback(null, user);
+            callback(null, false);
+        } else {
+            callback(null, user)
         }
     }).catch(err => console.log(err))
 })
