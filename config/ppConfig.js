@@ -8,9 +8,6 @@ passport.serializeUser((user, callback) => {
     //callback is from passport which verifies credentials and calls done and returns
 });
 
-
-
-
 //take user id and look up in db
 passport.deserializeUser((userId, callback) => {
     db.user.findByPk(userId).then(user => {
@@ -20,8 +17,7 @@ passport.deserializeUser((userId, callback) => {
     }).catch(err => console.log(err))
 });
 
-
-
+//Rome's code:
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
@@ -51,7 +47,7 @@ passport.use(new LocalStrategy({
         if (!user || !user.validPassword(password)) {
             callback(null, false);
         } else {
-            cb(null, user);
+            callback(null, user);
         }
     }).catch(callback)
 }));

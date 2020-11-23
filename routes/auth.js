@@ -33,10 +33,44 @@ router.post('/signup', (req, res) => {
         }
     }).catch(err => {
         console.log('Error', err);
-        req.flash('error', 'Either email or password is incorrect. Please try again.');
+        req.flash('error', 'Please try again.');
         res.redirect('/auth/signup');
     })
-})
+});
+/* Rome's code
+router.post('/signup', (req, res) => {
+    console.log(req.body);
+
+    db.user.findOrCreate({
+            where: { email: req.body.email },
+            defaults: {
+                name: req.body.name,
+                password: req.body.password
+            }
+        })
+        .then(([user, created]) => {
+            if (created) {
+                // if created, success and redirect back to home
+                console.log(`${user.name} was created`);
+                // Flash Message
+                const successObject = {
+                    successRedirect: '/',
+                    successFlash: 'Account created and logging in...'
+                }
+                passport.authenticate('local', successObject)(req, res);
+            } else {
+                // Email already exists
+                req.flash('error', 'Email already exists...')
+                res.redirect('/auth/signup');
+            }
+        })
+        .catch(err => {
+            console.log('Error', err);
+            req.flash('error', 'Either email or password is incorrect. Please try again.');
+            res.redirect('/auth/signup');
+        })
+}); */
+
 
 
 router.post('/login', passport.authenticate('local', {
