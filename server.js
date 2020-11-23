@@ -7,8 +7,6 @@ const passport = require('./config/ppConfig');
 const flash = require('connect-flash');
 const secret_session = process.env.SECRET_SESSION;
 
-console.log(secret_session);
-
 app.set('view engine', 'ejs');
 
 app.use(require('morgan')('dev'));
@@ -38,6 +36,8 @@ app.use((req, res, next) => {
     next();
 })
 
+//middleware
+const isLoggedIn = require('./middleware/isLoggedIn')
 
 app.get('/', (req, res) => {
     console.log(res.locals.alerts)
