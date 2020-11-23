@@ -40,3 +40,10 @@ module.exports = (sequelize, DataTypes) => {
     });
     return user;
 };
+
+user.addHook('beforeCreate', (pendingUser) => {
+    //Bcrypt make hash password
+    let hashPassword = bcrypt.hashSync(pendingUser.password, 12);
+    //replace password with hash
+    pendingUser.password = hashPassword;
+})
