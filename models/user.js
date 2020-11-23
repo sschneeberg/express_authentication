@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         password: {
             type: DataTypes.STRING,
             validate: {
-                len: { args: [12, 99], msg: 'Password must be at least 12 characters' },
+                len: { args: [8, 99], msg: 'Password must be at least 8 characters' },
             }
         }
     }, {
@@ -49,13 +49,16 @@ module.exports = (sequelize, DataTypes) => {
 
     //validate user when logging in
     user.prototype.validPassword = function(passwordTyped) {
-        let correctPassword = bcrypt.compareSync(passwordTyped, this.password)
+        let correctPassword = bcrypt.compareSync(passwordTyped, this.password);
+        console.log('validPassword', correctPassword);
+        return correctPassword;
     }
 
     //remove password before it get serialized in req
     user.prototype.toJSON = function() {
         let userData = this.get();
         delete userData.password;
+        console.log('JSON', userData);
         return userData;
     }
 

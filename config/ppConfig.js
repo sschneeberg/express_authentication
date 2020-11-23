@@ -16,3 +16,18 @@ passport.deserializeUser((userId, callback) => {
         }
     }).catch(err => console.log(err))
 })
+
+passport.use(new LocalStrategry({
+    usernameField: 'email',
+    passwordField: 'password'
+}, (email, password, callback) => {
+    db.user.findOne({
+        where: { email }
+    }).then((user) => {
+        if (!user || !user.validPassword(password)) {
+            callback(user, false)
+        }
+    }).catch(callback)
+}));
+
+module.exports = passport
