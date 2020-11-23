@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../models');
 const passport = require('../config/ppConfig');
 
+
 router.get('/signup', (req, res) => {
     res.render('auth/signup');
 });
@@ -12,9 +13,10 @@ router.get('/login', (req, res) => {
 });
 
 //POST 
+
 router.post('/signup', (req, res) => {
     db.user.findOrCreate({
-        where: { email: req.body.body },
+        where: { email: req.body.email },
         defaults: { name: req.body.name, password: req.body.password }
     }).then(([user, created]) => {
         if (created) {
@@ -29,7 +31,25 @@ router.post('/signup', (req, res) => {
             req.flash('error', 'Account already exists for this email')
             res.redirect('/auth/signup');
         }
-    }).catch(err => console.log(err))
+    }).catch(err => {
+        console.log('Error', err);
+        req.flash('error', 'Either email or password is incorrect. Please try again.');
+        res.redirect('/auth/signup');
+    })
+})
+
+
+router.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/auth/login',
+    successFlash: 'Welcome back',
+    failureFlash: 'Email or Password incorrect. Please try again.'
+}))
+
+router.get('/logout', (req, res) => {
+    req.logOut();
+    req.flash('Success', 'Logging out');
+    res.redirect('/')
 })
 
 module.exports = router;
