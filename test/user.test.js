@@ -63,7 +63,7 @@ describe('Creating a User', function() {
             password: 'password'
         }).then(function(newUser) {
             if (newUser.password === 'password') {
-                done(newUser);
+                done();
             } else {
                 done();
             }
@@ -77,9 +77,8 @@ describe('User instance methods', function() {
     describe('validPassword', function() {
         it('should validate a correct password', function(done) {
             db.user.findOne().then(function(user) {
-                console.log('validate', user.validPassword('password'));
                 if (user.validPassword('password')) {
-                    done(user);
+                    done();
                 } else {
                     done();
                 }
